@@ -22,12 +22,14 @@ export default function EventItem({
   return (
     <div className="p-4 w-full max-w-[232px]" key={event.id}>
       <div className="overflow-hidden">
-        <div className="w-full relative">
+        <div className="relative w-full">
           <Image
             src={event.imageCoverUri}
             alt={event.name}
             width={232}
             height={232}
+            objectFit="cover"
+            className="max-w-[232px] max-h-[232px] overflow-hidden"
           />
           <div className="absolute bottom-0 right-0 p-2">
             <p className="text-white text-opacity-80">{imageOverlay}</p>
@@ -35,7 +37,7 @@ export default function EventItem({
         </div>
 
         <div className="mt-4">
-          <h2 className="text-lg mb-2 text-white text-opacity-80">
+          <h2 className="text-md mb-2 text-white text-opacity-80 line-clamp-1">
             {event.name}
           </h2>
           <p className="text-white text-md font-normal text-opacity-80">

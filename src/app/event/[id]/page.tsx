@@ -18,7 +18,8 @@ import { FaEthereum } from "react-icons/fa";
 import { MdError } from "react-icons/md";
 import { TicketX__factory } from "@/lib/typechain";
 import Link from "next/link";
-
+import useSWR from "swr";
+import axios from "axios";
 export default function Event({ params }: { params: { id: string } }) {
   const [quantity, setQuantity] = useState(1);
   const [txID, setTxID] = useState("");
@@ -30,6 +31,16 @@ export default function Event({ params }: { params: { id: string } }) {
   const event = events.find((event) => event.id === Number(params.id));
   const { signer } = useWeb3ModalSigner();
   const mainContract = TicketX__factory.connect(contractAddress, signer!);
+  const { data, error, isLoading } = useSWR("ethPrice", async () => {
+    try {
+      const response = await axios.get(
+        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=thb"
+      );
+      return response.data.ethereum.thb;
+    } catch (error) {
+      console.error("Error fetching ETH price:", error);
+    }
+  });
   async function PurchaseTickets() {
     if (!event) {
       alert("Event not found");
@@ -54,6 +65,7 @@ export default function Event({ params }: { params: { id: string } }) {
       setTxError(error.message);
     }
   }
+  console.log(data);
 
   if (!events || !event) {
     return <Loading />;
@@ -132,10 +144,21 @@ export default function Event({ params }: { params: { id: string } }) {
                 <div className="flex items-center mt-4">
                   <p className="text-white text-opacity-80">
                     Total Price:{" "}
-                    {ethers.utils.formatEther(event.ticketPrice * quantity)}
+                    {ethers.utils.formatEther(event.ticketPrice * quantity)}{" "}
                   </p>
                   <FaEthereum className="text-white text-opacity-80" />
+                  <p className="text-white text-opacity-80">
+                    (~
+                    {Number(
+                      ethers.utils.formatEther(event.ticketPrice * quantity)
+                    ) * Number(data)}{" "}
+                    THB)
+                  </p>
                 </div>
+                <p className="text-white text-opacity-80 mt-4">
+                  Amount: {event.ticketLimit - event.ticketsIssued}/
+                  {event.ticketLimit}
+                </p>
               </div>
               <div className="w-full flex justify-center">
                 <button

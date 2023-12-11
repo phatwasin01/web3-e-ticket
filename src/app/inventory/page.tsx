@@ -47,6 +47,7 @@ export default function Inventory() {
   function handleValidate(id: BigNumber) {
     console.log(id);
   }
+  console.log(data);
 
   return (
     <div className="min-h-screen ">
@@ -69,22 +70,25 @@ export default function Inventory() {
         {data && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-8 mt-16">
             {data.some((ticket) => ticket.isUsed === selectedTab) &&
-              data.map((ticket) => (
-                <EventItem
-                  event={
-                    events.find(
-                      (event) =>
-                        event.id === ticket.eventId.toNumber() &&
-                        ticket.isUsed === selectedTab
-                    )!
-                  }
-                  imageOverlay={"#" + ticket.id}
-                  key={ticket.id.toNumber()}
-                  buttonText={selectedTab === false ? "Validate" : "Used"}
-                  isButtonDisabled={selectedTab === true}
-                  buttonOnClick={() => {}}
-                />
-              ))}
+              data.map(
+                (ticket) =>
+                  ticket.isUsed === selectedTab && (
+                    <EventItem
+                      event={
+                        events.find(
+                          (event) =>
+                            event.id === ticket.eventId.toNumber() &&
+                            ticket.isUsed === selectedTab
+                        )!
+                      }
+                      imageOverlay={"#" + ticket.id}
+                      key={ticket.id.toNumber()}
+                      buttonText={selectedTab === false ? "Validate" : "Used"}
+                      isButtonDisabled={selectedTab === true}
+                      buttonOnClick={() => {}}
+                    />
+                  )
+              )}
           </div>
         )}
         {(error || !data || isLoading) && (

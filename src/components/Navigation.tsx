@@ -13,13 +13,13 @@ export default function Navigation() {
   const { signer } = useWeb3ModalSigner();
 
   return (
-    <div className="navbar px-3">
-      <div className="flex-1">
+    <div className="navbar px-3 overflow-hidden">
+      <div className="hidden md:flex md:flex-1">
         <Link href="/" className="btn btn-ghost text-xl">
           Web3 Ticket
         </Link>
       </div>
-      <div className="flex-none gap-2">
+      <div className="flex-none gap-2 ">
         <Link href="/inventory" className="btn btn-ghost">
           Inventory
         </Link>
