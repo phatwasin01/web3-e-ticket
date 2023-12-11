@@ -44,9 +44,6 @@ export default function Events() {
   const handleClick = (id: number) => {
     router.push(`/event/${id}`);
   };
-  events.forEach((event) => {
-    console.log(event.ticketPrice);
-  });
   return (
     <>
       {events && (

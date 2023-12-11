@@ -40,13 +40,18 @@ interface EventsProviderProps {
 export function EventsProvider({ children }: EventsProviderProps) {
   const [events, setEvents] = useState<EventData[]>(() => {
     // Check if events are stored in local storage
-    const localData = localStorage.getItem("events");
-    return localData ? JSON.parse(localData) : [];
+    if (typeof window !== "undefined") {
+      // Access localStorage
+      const localData = localStorage.getItem("events");
+      return localData ? JSON.parse(localData) : [];
+    }
   });
 
   useEffect(() => {
     // Update local storage when events change
-    localStorage.setItem("events", JSON.stringify(events));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("events", JSON.stringify(events));
+    }
   }, [events]);
 
   const value = {
