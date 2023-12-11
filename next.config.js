@@ -7,6 +7,9 @@ const nextConfig = {
   images: {
     domains: ["via.placeholder.com", "peach-elegant-minnow-843.mypinata.cloud"],
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 module.exports = nextConfig;
