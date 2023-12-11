@@ -5,7 +5,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ["via.placeholder.com"],
+    domains: ["via.placeholder.com", "peach-elegant-minnow-843.mypinata.cloud"],
   },
 };
 

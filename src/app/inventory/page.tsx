@@ -1,126 +1,108 @@
 "use client";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
-import YourTicket from "@/components/YourTicket";
 import EventItem from "@/components/event/EventItem";
 import React, { useState } from "react";
-
+import { useWeb3ModalSigner } from "@web3modal/ethers5/react";
+import { contractAddress } from "@/lib/contract";
+import { TicketX__factory } from "@/lib/typechain";
+import { useEvents } from "@/context/EventContext";
+import type { EventData } from "@/context/EventContext";
+import useSWR from "swr";
+import { BigNumber } from "ethers";
 export default function Inventory() {
-  const [selectedTab, setSelectedTab] = useState(0);
-  const mockEvents = [
-    {
-      id: 1,
-      name: "Event 1",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 1",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 2,
-      name: "Event 2",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 2",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 3,
-      name: "Event 3",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 3",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 4,
-      name: "Event 4",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 4",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 5,
-      name: "Event 5",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 5",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 6,
-      name: "Event 6",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 6",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 7,
-      name: "Event 7",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 7",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 8,
-      name: "Event 8",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 8",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 9,
-      name: "Event 9",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 9",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 10,
-      name: "Event 10",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 10",
-      image: "https://via.placeholder.com/150",
-    },
-  ];
+  const [selectedTab, setSelectedTab] = useState(false);
+  const { events, setEvents } = useEvents();
+  const { signer } = useWeb3ModalSigner();
+  const mainContract = TicketX__factory.connect(contractAddress, signer!);
+  const { data, error, isLoading } = useSWR("tickets", async () => {
+    try {
+      const tickets = await mainContract.viewUserTickets();
+      console.log(tickets);
+      const eventsCheck = tickets.every((ticket) => {
+        const event = events.find(
+          (event) => event.id === ticket.eventId.toNumber()
+        );
+        return event;
+      });
+      if (!events || !eventsCheck) {
+        const events = await mainContract.viewAllEvents();
+        const mockEvents: EventData[] = events.map((event) => ({
+          id: event.id.toNumber(),
+          name: event.name,
+          dateTimestamp: event.dateTimestamp.toNumber(),
+          location: event.location,
+          imageCoverUri: event.imageCoverUri,
+          ticketLimit: event.ticketLimit.toNumber(),
+          ticketsIssued: event.ticketsIssued.toNumber(),
+          ticketPrice: event.ticketPrice.toNumber(),
+        }));
+        setEvents(mockEvents);
+      }
+      return tickets;
+    } catch (error) {
+      console.error("Error fetching event:", error);
+    }
+  });
+  function handleValidate(id: BigNumber) {
+    console.log(id);
+  }
+
   return (
     <div className="min-h-screen ">
       <Navigation />
       <div className="py-8 md:px-36">
         <div className="flex gap-8 mt-16">
           <button
-            className={selectedTab === 0 ? "btn btn-primary" : "btn"}
-            onClick={() => setSelectedTab(0)}
+            className={selectedTab === false ? "btn btn-primary" : "btn"}
+            onClick={() => setSelectedTab(false)}
           >
             My Tickets
           </button>
           <button
-            className={selectedTab === 1 ? "btn btn-primary" : "btn"}
-            onClick={() => setSelectedTab(1)}
+            className={selectedTab === true ? "btn btn-primary" : "btn"}
+            onClick={() => setSelectedTab(true)}
           >
             Used Tickets
           </button>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-8 mt-16">
-          {mockEvents.map((event) => (
-            <EventItem
-              event={event}
-              key={event.id}
-              buttonText={selectedTab === 0 ? "Validate" : "Used"}
-              isButtonDisabled={selectedTab === 1}
-              buttonOnClick={() => {}}
-            />
-          ))}
-        </div>
+        {data && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-8 mt-16">
+            {data.some((ticket) => ticket.isUsed === selectedTab) &&
+              data.map((ticket) => (
+                <EventItem
+                  event={
+                    events.find(
+                      (event) =>
+                        event.id === ticket.eventId.toNumber() &&
+                        ticket.isUsed === selectedTab
+                    )!
+                  }
+                  imageOverlay={"#" + ticket.id}
+                  key={ticket.id.toNumber()}
+                  buttonText={selectedTab === false ? "Validate" : "Used"}
+                  isButtonDisabled={selectedTab === true}
+                  buttonOnClick={() => {}}
+                />
+              ))}
+          </div>
+        )}
+        {(error || !data || isLoading) && (
+          <div className="mt-10 w-full flex justify-center">
+            <span className="loading loading-dots loading-lg text-primary"></span>
+          </div>
+        )}
       </div>
-
       <Footer />
+      <dialog id="my_modal_2" className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Hello!</h3>
+          <p className="py-4">Press ESC key or click outside to close</p>
+        </div>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
     </div>
   );
 }

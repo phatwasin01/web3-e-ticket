@@ -1,106 +1,73 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import EventItem from "./event/EventItem";
 import { useRouter } from "next/navigation";
+import {
+  useWeb3ModalAccount,
+  useWeb3ModalSigner,
+} from "@web3modal/ethers5/react";
+import { ethers } from "ethers";
+import useSWR from "swr";
+import Loading from "./Loading";
+import { contractAddress } from "@/lib/contract";
+import { TicketX__factory } from "@/lib/typechain";
+import { useEvents } from "@/context/EventContext";
+import type { EventData } from "@/context/EventContext";
+
 export default function Events() {
-  const mockEvents = [
-    {
-      id: 1,
-      name: "Event 1",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 1",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 2,
-      name: "Event 2",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 2",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 3,
-      name: "Event 3",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 3",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 4,
-      name: "Event 4",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 4",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 5,
-      name: "Event 5",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 5",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 6,
-      name: "Event 6",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 6",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 7,
-      name: "Event 7",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 7",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 8,
-      name: "Event 8",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 8",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 9,
-      name: "Event 9",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 9",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 10,
-      name: "Event 10",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 10",
-      image: "https://via.placeholder.com/150",
-    },
-  ];
+  const { address, chainId, isConnected } = useWeb3ModalAccount();
+  const { signer } = useWeb3ModalSigner();
   const router = useRouter();
+  const { events, setEvents } = useEvents();
+  const mainContract = TicketX__factory.connect(contractAddress, signer!);
+  const { data, error, isLoading } = useSWR("events", async () => {
+    try {
+      const events = await mainContract.viewAllEvents();
+      console.log("=================");
+      console.log(events);
+      const mockEvents: EventData[] = events.map((event) => ({
+        id: event.id.toNumber(),
+        name: event.name,
+        dateTimestamp: event.dateTimestamp.toNumber(),
+        location: event.location,
+        imageCoverUri: event.imageCoverUri,
+        ticketLimit: event.ticketLimit.toNumber(),
+        ticketsIssued: event.ticketsIssued.toNumber(),
+        ticketPrice: event.ticketPrice.toNumber(),
+      }));
+      setEvents(mockEvents);
+      return mockEvents;
+    } catch (error) {
+      console.error("Error fetching event:", error);
+    }
+  });
   const handleClick = (id: number) => {
     router.push(`/event/${id}`);
   };
+  events.forEach((event) => {
+    console.log(event.ticketPrice);
+  });
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-8">
-      {mockEvents.map((event) => (
-        <EventItem
-          event={event}
-          key={event.id}
-          buttonText="Buy Ticket"
-          buttonOnClick={() => {
-            handleClick(event.id);
-          }}
-        />
-      ))}
-    </div>
+    <>
+      {events && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-8">
+          {events.map((event) => (
+            <EventItem
+              event={event}
+              key={event.id}
+              buttonText="Buy Ticket"
+              buttonOnClick={() => {
+                handleClick(event.id);
+              }}
+            />
+          ))}
+        </div>
+      )}
+      {(error || !data || isLoading || !isConnected || !events) && (
+        <div className="mt-10 w-full flex justify-center">
+          <span className="loading loading-dots loading-lg text-primary"></span>
+        </div>
+      )}
+    </>
   );
 }

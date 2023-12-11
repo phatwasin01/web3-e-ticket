@@ -1,16 +1,12 @@
 import React from "react";
 import Image from "next/image";
 import { FaLocationDot } from "react-icons/fa6";
-import Link from "next/link";
+import type { EventData } from "@/context/EventContext";
+import moment from "moment";
+moment.locale("th");
 interface EventItemProps {
-  event: {
-    id: number;
-    name: string;
-    date: string;
-    time: string;
-    location: string;
-    image: string;
-  };
+  imageOverlay?: string;
+  event: EventData;
   isButtonDisabled?: boolean;
   buttonText?: string;
   buttonOnClick?: () => void;
@@ -21,17 +17,29 @@ export default function EventItem({
   buttonText,
   buttonOnClick,
   isButtonDisabled,
+  imageOverlay,
 }: EventItemProps) {
   return (
     <div className="p-4 w-full max-w-[232px]" key={event.id}>
       <div className="overflow-hidden">
-        <Image src={event.image} alt={event.name} width={232} height={232} />
+        <div className="w-full relative">
+          <Image
+            src={event.imageCoverUri}
+            alt={event.name}
+            width={232}
+            height={232}
+          />
+          <div className="absolute bottom-0 right-0 p-2">
+            <p className="text-white text-opacity-80">{imageOverlay}</p>
+          </div>
+        </div>
+
         <div className="mt-4">
           <h2 className="text-lg mb-2 text-white text-opacity-80">
             {event.name}
           </h2>
           <p className="text-white text-md font-normal text-opacity-80">
-            23 November
+            {moment(event.dateTimestamp * 1000).format("LL")}
           </p>
           <div className="flex items-center text-md font-normal gap-2">
             <FaLocationDot />

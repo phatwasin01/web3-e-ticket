@@ -4,95 +4,72 @@ import Navigation from "@/components/Navigation";
 import Image from "next/image";
 import React from "react";
 import { FaLocationDot } from "react-icons/fa6";
-import { FaCalendarAlt } from "react-icons/fa";
+import { FaCalendarAlt, FaCheckCircle } from "react-icons/fa";
 import { useState } from "react";
+import {
+  useWeb3ModalAccount,
+  useWeb3ModalSigner,
+} from "@web3modal/ethers5/react";
+import { ethers } from "ethers";
+import { contractAddress } from "@/lib/contract";
+import Loading from "@/components/Loading";
+import { useEvents } from "@/context/EventContext";
+import { FaEthereum } from "react-icons/fa";
+import { MdError } from "react-icons/md";
+import { TicketX__factory } from "@/lib/typechain";
+import Link from "next/link";
+
 export default function Event({ params }: { params: { id: string } }) {
-  const [price, setPrice] = useState(600);
   const [quantity, setQuantity] = useState(1);
-  const event = [
-    {
-      id: 1,
-      name: "Event 1",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 1",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 2,
-      name: "Event 2",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 2",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 3,
-      name: "Event 3",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 3",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 4,
-      name: "Event 4",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 4",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 5,
-      name: "Event 5",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 5",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 6,
-      name: "Event 6",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 6",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 7,
-      name: "Event 7",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 7",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 8,
-      name: "Event 8",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 8",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 9,
-      name: "Event 9",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 9",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 10,
-      name: "Event 10",
-      date: "2022-01-01",
-      time: "10:00 AM",
-      location: "Location 10",
-      image: "https://via.placeholder.com/150",
-    },
-  ].find((event) => event.id === parseInt(params.id));
-  if (!event) {
-    return <div>Event not found</div>;
+  const [txID, setTxID] = useState("");
+  const [isTxProcessing, setIsTxProcessing] = useState(false);
+  const [txSuccess, setTxSuccess] = useState(false);
+  const [txError, setTxError] = useState("");
+  const { isConnected } = useWeb3ModalAccount();
+  const { events, setEvents } = useEvents();
+  const event = events.find((event) => event.id === Number(params.id));
+  const { signer } = useWeb3ModalSigner();
+  const mainContract = TicketX__factory.connect(contractAddress, signer!);
+  async function PurchaseTickets() {
+    if (!event) {
+      alert("Event not found");
+      return;
+    }
+    try {
+      setIsTxProcessing(true);
+      const modal = document.getElementById("my_modal_1");
+      if (modal instanceof HTMLDialogElement) {
+        modal.showModal();
+      }
+      const tx = await mainContract.purchaseTickets(params.id, quantity, {
+        value: (event.ticketPrice * quantity).toString(),
+      });
+      setTxID(tx.hash);
+      await tx.wait();
+      setIsTxProcessing(false);
+      setTxSuccess(true);
+    } catch (error: any) {
+      console.error("Error purchasing tickets:", error);
+      setIsTxProcessing(false);
+      setTxError(error.message);
+    }
+  }
+
+  if (!events || !event) {
+    return <Loading />;
+  }
+  if (!isConnected) {
+    return (
+      <div className="min-h-screen ">
+        <Navigation />
+        <div className="mt-10 w-full flex justify-center my-16">
+          <p className="text-error text-2xl font-semibold ">
+            PLEASE CONNECT YOUR WALLET
+          </p>
+        </div>
+        <Footer />
+      </div>
+    );
   }
   return (
     <div className="min-h-screen ">
@@ -100,8 +77,8 @@ export default function Event({ params }: { params: { id: string } }) {
       <div className="p-8 md:px-36 mt-8">
         <div className="grid grid-cols-1 md:grid-cols-2">
           <Image
-            src={`https://via.placeholder.com/150`}
-            alt={"event image"}
+            src={event.imageCoverUri}
+            alt={event.id.toString()}
             width={470}
             height={470}
           />
@@ -121,7 +98,13 @@ export default function Event({ params }: { params: { id: string } }) {
                 </p>
               </div>
               <div className="border border-slate-100 border-opacity-80 mt-4 p-5 text-xl">
-                <p className="text-white text-opacity-80">Price: {price}</p>
+                <div className="flex items-center">
+                  <p className="text-white text-opacity-80">
+                    Price: {ethers.utils.formatEther(event.ticketPrice)}
+                  </p>
+                  <FaEthereum className="text-white text-opacity-80" />
+                </div>
+
                 <div className="flex ">
                   <p className="text-white text-opacity-80 mt-4">Amount:</p>
                   <div className="flex items-center justify-evenly">
@@ -146,12 +129,19 @@ export default function Event({ params }: { params: { id: string } }) {
                     </button>
                   </div>
                 </div>
-                <p className="text-white text-opacity-80 mt-4">
-                  Total Price: {price * quantity}
-                </p>
+                <div className="flex items-center mt-4">
+                  <p className="text-white text-opacity-80">
+                    Total Price:{" "}
+                    {ethers.utils.formatEther(event.ticketPrice * quantity)}
+                  </p>
+                  <FaEthereum className="text-white text-opacity-80" />
+                </div>
               </div>
               <div className="w-full flex justify-center">
-                <button className="btn btn-primary btn-md mt-4">
+                <button
+                  className="btn btn-primary btn-md mt-4"
+                  onClick={PurchaseTickets}
+                >
                   Purchase
                 </button>
               </div>
@@ -160,6 +150,42 @@ export default function Event({ params }: { params: { id: string } }) {
         </div>
       </div>
       <Footer />
+      <dialog id="my_modal_1" className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Transaction Status</h3>
+          <div className="mt-4 mb-4 text-2xl">
+            {isTxProcessing && (
+              <span className="loading loading-dots loading-lg"></span>
+            )}
+            {txSuccess && (
+              <div className="w-full flex justify-center items-center">
+                Transaction Success
+                <FaCheckCircle className="text-success text-2xl" />
+              </div>
+            )}
+            {txError && (
+              <div className="w-full flex justify-center items-center">
+                Transaction Error
+                <MdError className="text-error text-2xl" />
+              </div>
+            )}
+          </div>
+
+          <Link
+            href={`https://goerli.etherscan.io/tx/${txID}`}
+            target="_blank"
+            className="truncate mt-4"
+          >
+            Etherscan: {txID}
+          </Link>
+          <div className="modal-action">
+            <form method="dialog">
+              {/* if there is a button in form, it will close the modal */}
+              <button className="btn">Close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 }
