@@ -1,21 +1,19 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import EventItem from "./event/EventItem";
 import { useRouter } from "next/navigation";
 import {
   useWeb3ModalAccount,
   useWeb3ModalSigner,
 } from "@web3modal/ethers5/react";
-import { ethers } from "ethers";
 import useSWR from "swr";
-import Loading from "./Loading";
 import { contractAddress } from "@/lib/contract";
 import { TicketX__factory } from "@/lib/typechain";
 import { useEvents } from "@/context/EventContext";
 import type { EventData } from "@/context/EventContext";
 
 export default function Events() {
-  const { address, chainId, isConnected } = useWeb3ModalAccount();
+  const { isConnected } = useWeb3ModalAccount();
   const { signer } = useWeb3ModalSigner();
   const router = useRouter();
   const { events, setEvents } = useEvents();
@@ -45,7 +43,7 @@ export default function Events() {
     router.push(`/event/${id}`);
   };
   return (
-    <>
+    <div>
       {events && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-8">
           {events.map((event) => (
@@ -65,6 +63,6 @@ export default function Events() {
           <span className="loading loading-dots loading-lg text-primary"></span>
         </div>
       )}
-    </>
+    </div>
   );
 }

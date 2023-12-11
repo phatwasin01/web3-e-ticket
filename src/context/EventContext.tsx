@@ -38,21 +38,22 @@ interface EventsProviderProps {
 }
 
 export function EventsProvider({ children }: EventsProviderProps) {
-  const [events, setEvents] = useState<EventData[]>(() => {
-    // Check if events are stored in local storage
-    if (typeof window !== "undefined") {
-      // Access localStorage
-      const localData = localStorage.getItem("events");
-      return localData ? JSON.parse(localData) : [];
-    }
-  });
+  const [isEventFetched, setIsEventFetched] = useState(false);
+  const [events, setEvents] = useState<EventData[]>([]);
 
   useEffect(() => {
     // Update local storage when events change
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && !isEventFetched) {
+      // Access localStorage
+      const localData = localStorage.getItem("events");
+      const data = localData ? JSON.parse(localData) : [];
+      setEvents(data);
+      setIsEventFetched(true);
+    }
+    if (typeof window !== "undefined" && isEventFetched) {
       localStorage.setItem("events", JSON.stringify(events));
     }
-  }, [events]);
+  }, [events, isEventFetched]);
 
   const value = {
     events,
