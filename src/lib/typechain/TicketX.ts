@@ -104,9 +104,10 @@ export interface TicketXInterface extends utils.Interface {
     "transferOwnership(address)": FunctionFragment;
     "useTicket(uint256,uint256)": FunctionFragment;
     "viewAllEvents()": FunctionFragment;
+    "viewETHBalance()": FunctionFragment;
     "viewOpenEvents()": FunctionFragment;
     "viewUserTickets()": FunctionFragment;
-    "withdraw()": FunctionFragment;
+    "withdrawAll()": FunctionFragment;
   };
 
   getFunction(
@@ -138,9 +139,10 @@ export interface TicketXInterface extends utils.Interface {
       | "transferOwnership"
       | "useTicket"
       | "viewAllEvents"
+      | "viewETHBalance"
       | "viewOpenEvents"
       | "viewUserTickets"
-      | "withdraw"
+      | "withdrawAll"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -240,6 +242,10 @@ export interface TicketXInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "viewETHBalance",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "viewOpenEvents",
     values?: undefined
   ): string;
@@ -247,7 +253,10 @@ export interface TicketXInterface extends utils.Interface {
     functionFragment: "viewUserTickets",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "withdrawAll",
+    values?: undefined
+  ): string;
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
@@ -328,6 +337,10 @@ export interface TicketXInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "viewETHBalance",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "viewOpenEvents",
     data: BytesLike
   ): Result;
@@ -335,7 +348,10 @@ export interface TicketXInterface extends utils.Interface {
     functionFragment: "viewUserTickets",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "withdrawAll",
+    data: BytesLike
+  ): Result;
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
@@ -658,6 +674,8 @@ export interface TicketX extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[EventTicketing.EventStructOutput[]]>;
 
+    viewETHBalance(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     viewOpenEvents(
       overrides?: CallOverrides
     ): Promise<[EventTicketing.EventStructOutput[]]>;
@@ -666,7 +684,7 @@ export interface TicketX extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[EventTicketing.TicketStructOutput[]]>;
 
-    withdraw(
+    withdrawAll(
       overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
   };
@@ -827,6 +845,8 @@ export interface TicketX extends BaseContract {
     overrides?: CallOverrides
   ): Promise<EventTicketing.EventStructOutput[]>;
 
+  viewETHBalance(overrides?: CallOverrides): Promise<BigNumber>;
+
   viewOpenEvents(
     overrides?: CallOverrides
   ): Promise<EventTicketing.EventStructOutput[]>;
@@ -835,7 +855,7 @@ export interface TicketX extends BaseContract {
     overrides?: CallOverrides
   ): Promise<EventTicketing.TicketStructOutput[]>;
 
-  withdraw(
+  withdrawAll(
     overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
@@ -994,6 +1014,8 @@ export interface TicketX extends BaseContract {
       overrides?: CallOverrides
     ): Promise<EventTicketing.EventStructOutput[]>;
 
+    viewETHBalance(overrides?: CallOverrides): Promise<BigNumber>;
+
     viewOpenEvents(
       overrides?: CallOverrides
     ): Promise<EventTicketing.EventStructOutput[]>;
@@ -1002,7 +1024,7 @@ export interface TicketX extends BaseContract {
       overrides?: CallOverrides
     ): Promise<EventTicketing.TicketStructOutput[]>;
 
-    withdraw(overrides?: CallOverrides): Promise<void>;
+    withdrawAll(overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
@@ -1228,11 +1250,13 @@ export interface TicketX extends BaseContract {
 
     viewAllEvents(overrides?: CallOverrides): Promise<BigNumber>;
 
+    viewETHBalance(overrides?: CallOverrides): Promise<BigNumber>;
+
     viewOpenEvents(overrides?: CallOverrides): Promise<BigNumber>;
 
     viewUserTickets(overrides?: CallOverrides): Promise<BigNumber>;
 
-    withdraw(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+    withdrawAll(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -1371,11 +1395,13 @@ export interface TicketX extends BaseContract {
 
     viewAllEvents(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    viewETHBalance(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     viewOpenEvents(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     viewUserTickets(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    withdraw(
+    withdrawAll(
       overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
   };

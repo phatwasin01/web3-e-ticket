@@ -976,6 +976,19 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "viewETHBalance",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "viewOpenEvents",
     outputs: [
       {
@@ -1066,7 +1079,7 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "withdraw",
+    name: "withdrawAll",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

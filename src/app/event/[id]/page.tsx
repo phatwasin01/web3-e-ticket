@@ -149,9 +149,11 @@ export default function Event({ params }: { params: { id: string } }) {
                   <FaEthereum className="text-white text-opacity-80" />
                   <p className="text-white text-opacity-80">
                     (~
-                    {Number(
-                      ethers.utils.formatEther(event.ticketPrice * quantity)
-                    ) * Number(data)}{" "}
+                    {(
+                      Number(
+                        ethers.utils.formatEther(event.ticketPrice * quantity)
+                      ) * Number(data) || 0
+                    ).toFixed(2)}{" "}
                     THB)
                   </p>
                 </div>

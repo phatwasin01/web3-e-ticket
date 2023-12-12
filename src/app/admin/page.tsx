@@ -10,69 +10,48 @@ import { createEventFormToWeb3 } from "@/utils/event";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdError } from "react-icons/md";
 import Link from "next/link";
-import { ethers } from "ethers";
 import useSWR from "swr";
 import axios from "axios";
+import type { EventData } from "@/context/EventContext";
+import { ethers } from "ethers";
 export default function Admin() {
   const { events, setEvents } = useEvents();
   const { signer } = useWeb3ModalSigner();
-  const [eventName, setEventName] = useState("");
-  const [eventLocation, setEventLocation] = useState("");
-  const [eventDate, setEventDate] = useState("");
-  const [eventImageCoverUri, setEventImageCoverUri] = useState("");
-  const [eventTicketLimit, setEventTicketLimit] = useState(0);
-  const [eventTicketPrice, setEventTicketPrice] = useState("0");
   const [txID, setTxID] = useState("");
   const [isTxProcessing, setIsTxProcessing] = useState(false);
   const [txSuccess, setTxSuccess] = useState(false);
   const [txError, setTxError] = useState("");
-  const { data, error, isLoading } = useSWR("ethPrice", async () => {
+  const {
+    data: ethPrice,
+    error,
+    isLoading,
+  } = useSWR("ethPrice", async () => {
     try {
       const response = await axios.get(
         "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=thb"
       );
-      return response.data.ethereum.thb;
+      return Number(response.data.ethereum.thb);
     } catch (error) {
       console.error("Error fetching ETH price:", error);
     }
   });
-  const mainContract = TicketX__factory.connect(contractAddress, signer!);
-  async function handleCreateEvent() {
-    if (
-      !eventName ||
-      !eventLocation ||
-      !eventDate ||
-      !eventImageCoverUri ||
-      !eventTicketLimit ||
-      !eventTicketPrice
-    ) {
-      alert("Please fill in all the fields");
-      return;
+  const { data: ethBalance } = useSWR("balance", async () => {
+    try {
+      const balance = await mainContract.viewETHBalance();
+      return Number(ethers.utils.formatEther(balance));
+    } catch (error) {
+      console.error("Error fetching event:", error);
     }
-    const event = createEventFormToWeb3(
-      eventName,
-      eventLocation,
-      eventDate,
-      eventImageCoverUri,
-      eventTicketLimit,
-      eventTicketPrice
-    );
-    console.log(event);
-    console.log(event.ticketPrice.toNumber());
+  });
+  const mainContract = TicketX__factory.connect(contractAddress, signer!);
+  async function handleWithdraw() {
     try {
       setIsTxProcessing(true);
       const modal = document.getElementById("my_modal_1");
       if (modal instanceof HTMLDialogElement) {
         modal.showModal();
       }
-      const tx = await mainContract.createEvent(
-        event.name,
-        event.dateTimestamp,
-        event.location,
-        event.imageCoverUri,
-        event.ticketLimit,
-        event.ticketPrice
-      );
+      const tx = await mainContract.withdrawAll();
       setTxID(tx.hash);
       await tx.wait();
       setIsTxProcessing(false);
@@ -87,87 +66,34 @@ export default function Admin() {
     <div className="min-h-screen ">
       <Navigation />
       <div className="py-8 md:px-36">
-        <p className="text-xl font-bold mb-8 text-center">Create Event</p>
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Name</span>
-          </label>
-          <input
-            type="text"
-            placeholder="Name"
-            className="input input-bordered"
-            onChange={(e) => setEventName(e.target.value)}
-            value={eventName}
-          />
+        {ethBalance !== undefined && (
+          <div className="text-xl font-bold mb-8 text-center ">
+            Current Balance: {ethBalance} ETH (~
+            {((ethPrice || 0) * (ethBalance || 0) || 0).toFixed(2)}
+            THB)
+          </div>
+        )}
+        {ethBalance === undefined && (
+          <div className="text-xl font-bold mb-8 text-center ">
+            Current Balance: Loading...
+          </div>
+        )}
+        <div className="w-full flex justify-center items-center mb-16">
+          <button
+            className="btn btn-outline btn-primary"
+            onClick={handleWithdraw}
+          >
+            Claim All
+          </button>
         </div>
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Location</span>
-          </label>
-          <input
-            type="text"
-            placeholder="Location"
-            className="input input-bordered"
-            onChange={(e) => setEventLocation(e.target.value)}
-            value={eventLocation}
-          />
+        <div className="w-full flex justify-center items-center gap-4">
+          <Link href="/admin/event">
+            <button className="btn btn-primary">Create Event</button>
+          </Link>
+          <Link href="/admin/validate">
+            <button className="btn btn-primary">Use Ticket</button>
+          </Link>
         </div>
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Date</span>
-          </label>
-          <input
-            type="date"
-            placeholder="Date"
-            className="input input-bordered"
-            onChange={(e) => setEventDate(e.target.value)}
-            value={eventDate}
-          />
-        </div>
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Cover Image URI</span>
-          </label>
-          <input
-            type="text"
-            placeholder="Cover Image URI"
-            className="input input-bordered"
-            onChange={(e) => setEventImageCoverUri(e.target.value)}
-            value={eventImageCoverUri}
-          />
-        </div>
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">
-              Price (ETH) ~ {Number(eventTicketPrice) * Number(data)} THB
-            </span>
-          </label>
-          <input
-            type="number"
-            placeholder="Price"
-            className="input input-bordered"
-            onChange={(e) => setEventTicketPrice(e.target.value)}
-            value={eventTicketPrice}
-          />
-        </div>
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Amount</span>
-          </label>
-          <input
-            type="number"
-            placeholder="Amount"
-            className="input input-bordered"
-            onChange={(e) => setEventTicketLimit(Number(e.target.value))}
-            value={eventTicketLimit}
-          />
-        </div>
-        <button
-          className="btn btn-primary mt-4 w-full"
-          onClick={handleCreateEvent}
-        >
-          Create
-        </button>
       </div>
       <Footer />
       <dialog id="my_modal_1" className="modal">
