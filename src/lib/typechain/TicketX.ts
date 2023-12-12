@@ -78,18 +78,8 @@ export declare namespace EventTicketing {
 export interface TicketXInterface extends utils.Interface {
   functions: {
     "approve(address,uint256)": FunctionFragment;
-    "createEvent(string,uint256,string,string,uint256,uint256)": FunctionFragment;
-    "purchaseTickets(uint256,uint256)": FunctionFragment;
-    "renounceOwnership()": FunctionFragment;
-    "safeTransferFrom(address,address,uint256)": FunctionFragment;
-    "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
-    "setApprovalForAll(address,bool)": FunctionFragment;
-    "toggleEvent(uint256,bool)": FunctionFragment;
-    "transferFrom(address,address,uint256)": FunctionFragment;
-    "transferOwnership(address)": FunctionFragment;
-    "useTicket(uint256,uint256)": FunctionFragment;
-    "withdraw()": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
+    "createEvent(string,uint256,string,string,uint256,uint256)": FunctionFragment;
     "events(uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
@@ -97,33 +87,33 @@ export interface TicketXInterface extends utils.Interface {
     "nextEventId()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
+    "purchaseTickets(uint256,uint256)": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "safeTransferFrom(address,address,uint256)": FunctionFragment;
+    "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
+    "setApprovalForAll(address,bool)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tickets(uint256)": FunctionFragment;
+    "toggleEvent(uint256,bool)": FunctionFragment;
     "tokenByIndex(uint256)": FunctionFragment;
     "tokenOfOwnerByIndex(address,uint256)": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
     "totalSupply()": FunctionFragment;
+    "transferFrom(address,address,uint256)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
+    "useTicket(uint256,uint256)": FunctionFragment;
     "viewAllEvents()": FunctionFragment;
     "viewOpenEvents()": FunctionFragment;
     "viewUserTickets()": FunctionFragment;
+    "withdraw()": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
       | "approve"
-      | "createEvent"
-      | "purchaseTickets"
-      | "renounceOwnership"
-      | "safeTransferFrom(address,address,uint256)"
-      | "safeTransferFrom(address,address,uint256,bytes)"
-      | "setApprovalForAll"
-      | "toggleEvent"
-      | "transferFrom"
-      | "transferOwnership"
-      | "useTicket"
-      | "withdraw"
       | "balanceOf"
+      | "createEvent"
       | "events"
       | "getApproved"
       | "isApprovedForAll"
@@ -131,64 +121,37 @@ export interface TicketXInterface extends utils.Interface {
       | "nextEventId"
       | "owner"
       | "ownerOf"
+      | "purchaseTickets"
+      | "renounceOwnership"
+      | "safeTransferFrom(address,address,uint256)"
+      | "safeTransferFrom(address,address,uint256,bytes)"
+      | "setApprovalForAll"
       | "supportsInterface"
       | "symbol"
       | "tickets"
+      | "toggleEvent"
       | "tokenByIndex"
       | "tokenOfOwnerByIndex"
       | "tokenURI"
       | "totalSupply"
+      | "transferFrom"
+      | "transferOwnership"
+      | "useTicket"
       | "viewAllEvents"
       | "viewOpenEvents"
       | "viewUserTickets"
+      | "withdraw"
   ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "approve",
     values: [string, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(
     functionFragment: "createEvent",
     values: [string, BigNumberish, string, string, BigNumberish, BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "purchaseTickets",
-    values: [BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "renounceOwnership",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "safeTransferFrom(address,address,uint256)",
-    values: [string, string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "safeTransferFrom(address,address,uint256,bytes)",
-    values: [string, string, BigNumberish, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setApprovalForAll",
-    values: [string, boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "toggleEvent",
-    values: [BigNumberish, boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "transferFrom",
-    values: [string, string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "transferOwnership",
-    values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "useTicket",
-    values: [BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
-  encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(
     functionFragment: "events",
     values: [BigNumberish]
@@ -212,6 +175,26 @@ export interface TicketXInterface extends utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "purchaseTickets",
+    values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "safeTransferFrom(address,address,uint256)",
+    values: [string, string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "safeTransferFrom(address,address,uint256,bytes)",
+    values: [string, string, BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setApprovalForAll",
+    values: [string, boolean]
+  ): string;
+  encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
   ): string;
@@ -219,6 +202,10 @@ export interface TicketXInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "tickets",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "toggleEvent",
+    values: [BigNumberish, boolean]
   ): string;
   encodeFunctionData(
     functionFragment: "tokenByIndex",
@@ -237,6 +224,18 @@ export interface TicketXInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "transferFrom",
+    values: [string, string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "useTicket",
+    values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "viewAllEvents",
     values?: undefined
   ): string;
@@ -248,12 +247,30 @@ export interface TicketXInterface extends utils.Interface {
     functionFragment: "viewUserTickets",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "createEvent",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "events", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getApproved",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isApprovedForAll",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "nextEventId",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "purchaseTickets",
     data: BytesLike
@@ -275,42 +292,15 @@ export interface TicketXInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "toggleEvent",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "transferFrom",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "transferOwnership",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "useTicket", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "events", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getApproved",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "isApprovedForAll",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "nextEventId",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
-  decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "tickets", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "toggleEvent",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "tokenByIndex",
     data: BytesLike
@@ -325,6 +315,15 @@ export interface TicketXInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "transferFrom",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "useTicket", data: BytesLike): Result;
+  decodeFunctionResult(
     functionFragment: "viewAllEvents",
     data: BytesLike
   ): Result;
@@ -336,18 +335,29 @@ export interface TicketXInterface extends utils.Interface {
     functionFragment: "viewUserTickets",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
+    "EventCreated(uint256,string,uint256,string,uint256,uint256)": EventFragment;
+    "EventToggled(uint256,bool)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
+    "TicketUsed(uint256,uint256)": EventFragment;
+    "TicketsPurchased(uint256,address,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
+    "Withdrawn(address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "EventCreated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "EventToggled"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TicketUsed"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TicketsPurchased"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Withdrawn"): EventFragment;
 }
 
 export interface ApprovalEventObject {
@@ -374,6 +384,32 @@ export type ApprovalForAllEvent = TypedEvent<
 
 export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>;
 
+export interface EventCreatedEventObject {
+  eventId: BigNumber;
+  name: string;
+  dateTimestamp: BigNumber;
+  location: string;
+  ticketLimit: BigNumber;
+  ticketPrice: BigNumber;
+}
+export type EventCreatedEvent = TypedEvent<
+  [BigNumber, string, BigNumber, string, BigNumber, BigNumber],
+  EventCreatedEventObject
+>;
+
+export type EventCreatedEventFilter = TypedEventFilter<EventCreatedEvent>;
+
+export interface EventToggledEventObject {
+  eventId: BigNumber;
+  isClosed: boolean;
+}
+export type EventToggledEvent = TypedEvent<
+  [BigNumber, boolean],
+  EventToggledEventObject
+>;
+
+export type EventToggledEventFilter = TypedEventFilter<EventToggledEvent>;
+
 export interface OwnershipTransferredEventObject {
   previousOwner: string;
   newOwner: string;
@@ -386,6 +422,30 @@ export type OwnershipTransferredEvent = TypedEvent<
 export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
 
+export interface TicketUsedEventObject {
+  ticketId: BigNumber;
+  eventId: BigNumber;
+}
+export type TicketUsedEvent = TypedEvent<
+  [BigNumber, BigNumber],
+  TicketUsedEventObject
+>;
+
+export type TicketUsedEventFilter = TypedEventFilter<TicketUsedEvent>;
+
+export interface TicketsPurchasedEventObject {
+  eventId: BigNumber;
+  buyer: string;
+  quantity: BigNumber;
+}
+export type TicketsPurchasedEvent = TypedEvent<
+  [BigNumber, string, BigNumber],
+  TicketsPurchasedEventObject
+>;
+
+export type TicketsPurchasedEventFilter =
+  TypedEventFilter<TicketsPurchasedEvent>;
+
 export interface TransferEventObject {
   from: string;
   to: string;
@@ -397,6 +457,17 @@ export type TransferEvent = TypedEvent<
 >;
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
+
+export interface WithdrawnEventObject {
+  owner: string;
+  amount: BigNumber;
+}
+export type WithdrawnEvent = TypedEvent<
+  [string, BigNumber],
+  WithdrawnEventObject
+>;
+
+export type WithdrawnEventFilter = TypedEventFilter<WithdrawnEvent>;
 
 export interface TicketX extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -431,6 +502,8 @@ export interface TicketX extends BaseContract {
       overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
+    balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
+
     createEvent(
       name: string,
       dateTimestamp: BigNumberish,
@@ -440,67 +513,6 @@ export interface TicketX extends BaseContract {
       ticketPrice: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
-
-    purchaseTickets(
-      eventId: BigNumberish,
-      quantity: BigNumberish,
-      overrides?: PayableOverrides & { from?: string }
-    ): Promise<ContractTransaction>;
-
-    renounceOwnership(
-      overrides?: Overrides & { from?: string }
-    ): Promise<ContractTransaction>;
-
-    "safeTransferFrom(address,address,uint256)"(
-      from: string,
-      to: string,
-      tokenId: BigNumberish,
-      overrides?: Overrides & { from?: string }
-    ): Promise<ContractTransaction>;
-
-    "safeTransferFrom(address,address,uint256,bytes)"(
-      from: string,
-      to: string,
-      tokenId: BigNumberish,
-      data: BytesLike,
-      overrides?: Overrides & { from?: string }
-    ): Promise<ContractTransaction>;
-
-    setApprovalForAll(
-      operator: string,
-      approved: boolean,
-      overrides?: Overrides & { from?: string }
-    ): Promise<ContractTransaction>;
-
-    toggleEvent(
-      eventId: BigNumberish,
-      _isClosed: boolean,
-      overrides?: Overrides & { from?: string }
-    ): Promise<ContractTransaction>;
-
-    transferFrom(
-      from: string,
-      to: string,
-      tokenId: BigNumberish,
-      overrides?: Overrides & { from?: string }
-    ): Promise<ContractTransaction>;
-
-    transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string }
-    ): Promise<ContractTransaction>;
-
-    useTicket(
-      ticketId: BigNumberish,
-      eventId: BigNumberish,
-      overrides?: Overrides & { from?: string }
-    ): Promise<ContractTransaction>;
-
-    withdraw(
-      overrides?: Overrides & { from?: string }
-    ): Promise<ContractTransaction>;
-
-    balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     events(
       arg0: BigNumberish,
@@ -551,6 +563,37 @@ export interface TicketX extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    purchaseTickets(
+      eventId: BigNumberish,
+      quantity: BigNumberish,
+      overrides?: PayableOverrides & { from?: string }
+    ): Promise<ContractTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: string }
+    ): Promise<ContractTransaction>;
+
+    "safeTransferFrom(address,address,uint256)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string }
+    ): Promise<ContractTransaction>;
+
+    "safeTransferFrom(address,address,uint256,bytes)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      data: BytesLike,
+      overrides?: Overrides & { from?: string }
+    ): Promise<ContractTransaction>;
+
+    setApprovalForAll(
+      operator: string,
+      approved: boolean,
+      overrides?: Overrides & { from?: string }
+    ): Promise<ContractTransaction>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -568,6 +611,12 @@ export interface TicketX extends BaseContract {
         isUsed: boolean;
       }
     >;
+
+    toggleEvent(
+      eventId: BigNumberish,
+      _isClosed: boolean,
+      overrides?: Overrides & { from?: string }
+    ): Promise<ContractTransaction>;
 
     tokenByIndex(
       index: BigNumberish,
@@ -587,6 +636,24 @@ export interface TicketX extends BaseContract {
 
     totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    transferFrom(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string }
+    ): Promise<ContractTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string }
+    ): Promise<ContractTransaction>;
+
+    useTicket(
+      ticketId: BigNumberish,
+      eventId: BigNumberish,
+      overrides?: Overrides & { from?: string }
+    ): Promise<ContractTransaction>;
+
     viewAllEvents(
       overrides?: CallOverrides
     ): Promise<[EventTicketing.EventStructOutput[]]>;
@@ -598,6 +665,10 @@ export interface TicketX extends BaseContract {
     viewUserTickets(
       overrides?: CallOverrides
     ): Promise<[EventTicketing.TicketStructOutput[]]>;
+
+    withdraw(
+      overrides?: Overrides & { from?: string }
+    ): Promise<ContractTransaction>;
   };
 
   approve(
@@ -605,6 +676,8 @@ export interface TicketX extends BaseContract {
     tokenId: BigNumberish,
     overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
+
+  balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   createEvent(
     name: string,
@@ -615,67 +688,6 @@ export interface TicketX extends BaseContract {
     ticketPrice: BigNumberish,
     overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
-
-  purchaseTickets(
-    eventId: BigNumberish,
-    quantity: BigNumberish,
-    overrides?: PayableOverrides & { from?: string }
-  ): Promise<ContractTransaction>;
-
-  renounceOwnership(
-    overrides?: Overrides & { from?: string }
-  ): Promise<ContractTransaction>;
-
-  "safeTransferFrom(address,address,uint256)"(
-    from: string,
-    to: string,
-    tokenId: BigNumberish,
-    overrides?: Overrides & { from?: string }
-  ): Promise<ContractTransaction>;
-
-  "safeTransferFrom(address,address,uint256,bytes)"(
-    from: string,
-    to: string,
-    tokenId: BigNumberish,
-    data: BytesLike,
-    overrides?: Overrides & { from?: string }
-  ): Promise<ContractTransaction>;
-
-  setApprovalForAll(
-    operator: string,
-    approved: boolean,
-    overrides?: Overrides & { from?: string }
-  ): Promise<ContractTransaction>;
-
-  toggleEvent(
-    eventId: BigNumberish,
-    _isClosed: boolean,
-    overrides?: Overrides & { from?: string }
-  ): Promise<ContractTransaction>;
-
-  transferFrom(
-    from: string,
-    to: string,
-    tokenId: BigNumberish,
-    overrides?: Overrides & { from?: string }
-  ): Promise<ContractTransaction>;
-
-  transferOwnership(
-    newOwner: string,
-    overrides?: Overrides & { from?: string }
-  ): Promise<ContractTransaction>;
-
-  useTicket(
-    ticketId: BigNumberish,
-    eventId: BigNumberish,
-    overrides?: Overrides & { from?: string }
-  ): Promise<ContractTransaction>;
-
-  withdraw(
-    overrides?: Overrides & { from?: string }
-  ): Promise<ContractTransaction>;
-
-  balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   events(
     arg0: BigNumberish,
@@ -723,6 +735,37 @@ export interface TicketX extends BaseContract {
 
   ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
+  purchaseTickets(
+    eventId: BigNumberish,
+    quantity: BigNumberish,
+    overrides?: PayableOverrides & { from?: string }
+  ): Promise<ContractTransaction>;
+
+  renounceOwnership(
+    overrides?: Overrides & { from?: string }
+  ): Promise<ContractTransaction>;
+
+  "safeTransferFrom(address,address,uint256)"(
+    from: string,
+    to: string,
+    tokenId: BigNumberish,
+    overrides?: Overrides & { from?: string }
+  ): Promise<ContractTransaction>;
+
+  "safeTransferFrom(address,address,uint256,bytes)"(
+    from: string,
+    to: string,
+    tokenId: BigNumberish,
+    data: BytesLike,
+    overrides?: Overrides & { from?: string }
+  ): Promise<ContractTransaction>;
+
+  setApprovalForAll(
+    operator: string,
+    approved: boolean,
+    overrides?: Overrides & { from?: string }
+  ): Promise<ContractTransaction>;
+
   supportsInterface(
     interfaceId: BytesLike,
     overrides?: CallOverrides
@@ -741,6 +784,12 @@ export interface TicketX extends BaseContract {
     }
   >;
 
+  toggleEvent(
+    eventId: BigNumberish,
+    _isClosed: boolean,
+    overrides?: Overrides & { from?: string }
+  ): Promise<ContractTransaction>;
+
   tokenByIndex(
     index: BigNumberish,
     overrides?: CallOverrides
@@ -756,6 +805,24 @@ export interface TicketX extends BaseContract {
 
   totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
+  transferFrom(
+    from: string,
+    to: string,
+    tokenId: BigNumberish,
+    overrides?: Overrides & { from?: string }
+  ): Promise<ContractTransaction>;
+
+  transferOwnership(
+    newOwner: string,
+    overrides?: Overrides & { from?: string }
+  ): Promise<ContractTransaction>;
+
+  useTicket(
+    ticketId: BigNumberish,
+    eventId: BigNumberish,
+    overrides?: Overrides & { from?: string }
+  ): Promise<ContractTransaction>;
+
   viewAllEvents(
     overrides?: CallOverrides
   ): Promise<EventTicketing.EventStructOutput[]>;
@@ -768,12 +835,18 @@ export interface TicketX extends BaseContract {
     overrides?: CallOverrides
   ): Promise<EventTicketing.TicketStructOutput[]>;
 
+  withdraw(
+    overrides?: Overrides & { from?: string }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     approve(
       to: string,
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     createEvent(
       name: string,
@@ -784,63 +857,6 @@ export interface TicketX extends BaseContract {
       ticketPrice: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    purchaseTickets(
-      eventId: BigNumberish,
-      quantity: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    renounceOwnership(overrides?: CallOverrides): Promise<void>;
-
-    "safeTransferFrom(address,address,uint256)"(
-      from: string,
-      to: string,
-      tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "safeTransferFrom(address,address,uint256,bytes)"(
-      from: string,
-      to: string,
-      tokenId: BigNumberish,
-      data: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setApprovalForAll(
-      operator: string,
-      approved: boolean,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    toggleEvent(
-      eventId: BigNumberish,
-      _isClosed: boolean,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    transferFrom(
-      from: string,
-      to: string,
-      tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    transferOwnership(
-      newOwner: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    useTicket(
-      ticketId: BigNumberish,
-      eventId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    withdraw(overrides?: CallOverrides): Promise<void>;
-
-    balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     events(
       arg0: BigNumberish,
@@ -888,6 +904,35 @@ export interface TicketX extends BaseContract {
 
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
+    purchaseTickets(
+      eventId: BigNumberish,
+      quantity: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    "safeTransferFrom(address,address,uint256)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "safeTransferFrom(address,address,uint256,bytes)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      data: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setApprovalForAll(
+      operator: string,
+      approved: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -906,6 +951,12 @@ export interface TicketX extends BaseContract {
       }
     >;
 
+    toggleEvent(
+      eventId: BigNumberish,
+      _isClosed: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     tokenByIndex(
       index: BigNumberish,
       overrides?: CallOverrides
@@ -921,6 +972,24 @@ export interface TicketX extends BaseContract {
 
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
+    transferFrom(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    useTicket(
+      ticketId: BigNumberish,
+      eventId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     viewAllEvents(
       overrides?: CallOverrides
     ): Promise<EventTicketing.EventStructOutput[]>;
@@ -932,6 +1001,8 @@ export interface TicketX extends BaseContract {
     viewUserTickets(
       overrides?: CallOverrides
     ): Promise<EventTicketing.TicketStructOutput[]>;
+
+    withdraw(overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
@@ -957,6 +1028,32 @@ export interface TicketX extends BaseContract {
       approved?: null
     ): ApprovalForAllEventFilter;
 
+    "EventCreated(uint256,string,uint256,string,uint256,uint256)"(
+      eventId?: BigNumberish | null,
+      name?: null,
+      dateTimestamp?: null,
+      location?: null,
+      ticketLimit?: null,
+      ticketPrice?: null
+    ): EventCreatedEventFilter;
+    EventCreated(
+      eventId?: BigNumberish | null,
+      name?: null,
+      dateTimestamp?: null,
+      location?: null,
+      ticketLimit?: null,
+      ticketPrice?: null
+    ): EventCreatedEventFilter;
+
+    "EventToggled(uint256,bool)"(
+      eventId?: BigNumberish | null,
+      isClosed?: null
+    ): EventToggledEventFilter;
+    EventToggled(
+      eventId?: BigNumberish | null,
+      isClosed?: null
+    ): EventToggledEventFilter;
+
     "OwnershipTransferred(address,address)"(
       previousOwner?: string | null,
       newOwner?: string | null
@@ -965,6 +1062,26 @@ export interface TicketX extends BaseContract {
       previousOwner?: string | null,
       newOwner?: string | null
     ): OwnershipTransferredEventFilter;
+
+    "TicketUsed(uint256,uint256)"(
+      ticketId?: BigNumberish | null,
+      eventId?: BigNumberish | null
+    ): TicketUsedEventFilter;
+    TicketUsed(
+      ticketId?: BigNumberish | null,
+      eventId?: BigNumberish | null
+    ): TicketUsedEventFilter;
+
+    "TicketsPurchased(uint256,address,uint256)"(
+      eventId?: BigNumberish | null,
+      buyer?: null,
+      quantity?: null
+    ): TicketsPurchasedEventFilter;
+    TicketsPurchased(
+      eventId?: BigNumberish | null,
+      buyer?: null,
+      quantity?: null
+    ): TicketsPurchasedEventFilter;
 
     "Transfer(address,address,uint256)"(
       from?: string | null,
@@ -976,6 +1093,12 @@ export interface TicketX extends BaseContract {
       to?: string | null,
       tokenId?: BigNumberish | null
     ): TransferEventFilter;
+
+    "Withdrawn(address,uint256)"(
+      owner?: string | null,
+      amount?: null
+    ): WithdrawnEventFilter;
+    Withdrawn(owner?: string | null, amount?: null): WithdrawnEventFilter;
   };
 
   estimateGas: {
@@ -984,6 +1107,8 @@ export interface TicketX extends BaseContract {
       tokenId: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
+
+    balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     createEvent(
       name: string,
@@ -994,65 +1119,6 @@ export interface TicketX extends BaseContract {
       ticketPrice: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
-
-    purchaseTickets(
-      eventId: BigNumberish,
-      quantity: BigNumberish,
-      overrides?: PayableOverrides & { from?: string }
-    ): Promise<BigNumber>;
-
-    renounceOwnership(
-      overrides?: Overrides & { from?: string }
-    ): Promise<BigNumber>;
-
-    "safeTransferFrom(address,address,uint256)"(
-      from: string,
-      to: string,
-      tokenId: BigNumberish,
-      overrides?: Overrides & { from?: string }
-    ): Promise<BigNumber>;
-
-    "safeTransferFrom(address,address,uint256,bytes)"(
-      from: string,
-      to: string,
-      tokenId: BigNumberish,
-      data: BytesLike,
-      overrides?: Overrides & { from?: string }
-    ): Promise<BigNumber>;
-
-    setApprovalForAll(
-      operator: string,
-      approved: boolean,
-      overrides?: Overrides & { from?: string }
-    ): Promise<BigNumber>;
-
-    toggleEvent(
-      eventId: BigNumberish,
-      _isClosed: boolean,
-      overrides?: Overrides & { from?: string }
-    ): Promise<BigNumber>;
-
-    transferFrom(
-      from: string,
-      to: string,
-      tokenId: BigNumberish,
-      overrides?: Overrides & { from?: string }
-    ): Promise<BigNumber>;
-
-    transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string }
-    ): Promise<BigNumber>;
-
-    useTicket(
-      ticketId: BigNumberish,
-      eventId: BigNumberish,
-      overrides?: Overrides & { from?: string }
-    ): Promise<BigNumber>;
-
-    withdraw(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
-
-    balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     events(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1078,6 +1144,37 @@ export interface TicketX extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    purchaseTickets(
+      eventId: BigNumberish,
+      quantity: BigNumberish,
+      overrides?: PayableOverrides & { from?: string }
+    ): Promise<BigNumber>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: string }
+    ): Promise<BigNumber>;
+
+    "safeTransferFrom(address,address,uint256)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string }
+    ): Promise<BigNumber>;
+
+    "safeTransferFrom(address,address,uint256,bytes)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      data: BytesLike,
+      overrides?: Overrides & { from?: string }
+    ): Promise<BigNumber>;
+
+    setApprovalForAll(
+      operator: string,
+      approved: boolean,
+      overrides?: Overrides & { from?: string }
+    ): Promise<BigNumber>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -1086,6 +1183,12 @@ export interface TicketX extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
     tickets(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    toggleEvent(
+      eventId: BigNumberish,
+      _isClosed: boolean,
+      overrides?: Overrides & { from?: string }
+    ): Promise<BigNumber>;
 
     tokenByIndex(
       index: BigNumberish,
@@ -1105,11 +1208,31 @@ export interface TicketX extends BaseContract {
 
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
+    transferFrom(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string }
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string }
+    ): Promise<BigNumber>;
+
+    useTicket(
+      ticketId: BigNumberish,
+      eventId: BigNumberish,
+      overrides?: Overrides & { from?: string }
+    ): Promise<BigNumber>;
+
     viewAllEvents(overrides?: CallOverrides): Promise<BigNumber>;
 
     viewOpenEvents(overrides?: CallOverrides): Promise<BigNumber>;
 
     viewUserTickets(overrides?: CallOverrides): Promise<BigNumber>;
+
+    withdraw(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -1117,6 +1240,11 @@ export interface TicketX extends BaseContract {
       to: string,
       tokenId: BigNumberish,
       overrides?: Overrides & { from?: string }
+    ): Promise<PopulatedTransaction>;
+
+    balanceOf(
+      owner: string,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     createEvent(
@@ -1127,70 +1255,6 @@ export interface TicketX extends BaseContract {
       ticketLimit: BigNumberish,
       ticketPrice: BigNumberish,
       overrides?: Overrides & { from?: string }
-    ): Promise<PopulatedTransaction>;
-
-    purchaseTickets(
-      eventId: BigNumberish,
-      quantity: BigNumberish,
-      overrides?: PayableOverrides & { from?: string }
-    ): Promise<PopulatedTransaction>;
-
-    renounceOwnership(
-      overrides?: Overrides & { from?: string }
-    ): Promise<PopulatedTransaction>;
-
-    "safeTransferFrom(address,address,uint256)"(
-      from: string,
-      to: string,
-      tokenId: BigNumberish,
-      overrides?: Overrides & { from?: string }
-    ): Promise<PopulatedTransaction>;
-
-    "safeTransferFrom(address,address,uint256,bytes)"(
-      from: string,
-      to: string,
-      tokenId: BigNumberish,
-      data: BytesLike,
-      overrides?: Overrides & { from?: string }
-    ): Promise<PopulatedTransaction>;
-
-    setApprovalForAll(
-      operator: string,
-      approved: boolean,
-      overrides?: Overrides & { from?: string }
-    ): Promise<PopulatedTransaction>;
-
-    toggleEvent(
-      eventId: BigNumberish,
-      _isClosed: boolean,
-      overrides?: Overrides & { from?: string }
-    ): Promise<PopulatedTransaction>;
-
-    transferFrom(
-      from: string,
-      to: string,
-      tokenId: BigNumberish,
-      overrides?: Overrides & { from?: string }
-    ): Promise<PopulatedTransaction>;
-
-    transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string }
-    ): Promise<PopulatedTransaction>;
-
-    useTicket(
-      ticketId: BigNumberish,
-      eventId: BigNumberish,
-      overrides?: Overrides & { from?: string }
-    ): Promise<PopulatedTransaction>;
-
-    withdraw(
-      overrides?: Overrides & { from?: string }
-    ): Promise<PopulatedTransaction>;
-
-    balanceOf(
-      owner: string,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     events(
@@ -1220,6 +1284,37 @@ export interface TicketX extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    purchaseTickets(
+      eventId: BigNumberish,
+      quantity: BigNumberish,
+      overrides?: PayableOverrides & { from?: string }
+    ): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: string }
+    ): Promise<PopulatedTransaction>;
+
+    "safeTransferFrom(address,address,uint256)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string }
+    ): Promise<PopulatedTransaction>;
+
+    "safeTransferFrom(address,address,uint256,bytes)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      data: BytesLike,
+      overrides?: Overrides & { from?: string }
+    ): Promise<PopulatedTransaction>;
+
+    setApprovalForAll(
+      operator: string,
+      approved: boolean,
+      overrides?: Overrides & { from?: string }
+    ): Promise<PopulatedTransaction>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -1230,6 +1325,12 @@ export interface TicketX extends BaseContract {
     tickets(
       arg0: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    toggleEvent(
+      eventId: BigNumberish,
+      _isClosed: boolean,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     tokenByIndex(
@@ -1250,10 +1351,32 @@ export interface TicketX extends BaseContract {
 
     totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    transferFrom(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string }
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string }
+    ): Promise<PopulatedTransaction>;
+
+    useTicket(
+      ticketId: BigNumberish,
+      eventId: BigNumberish,
+      overrides?: Overrides & { from?: string }
+    ): Promise<PopulatedTransaction>;
+
     viewAllEvents(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     viewOpenEvents(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     viewUserTickets(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    withdraw(
+      overrides?: Overrides & { from?: string }
+    ): Promise<PopulatedTransaction>;
   };
 }

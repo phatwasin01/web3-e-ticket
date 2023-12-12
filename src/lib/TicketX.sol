@@ -37,6 +37,11 @@ contract EventTicketing is ERC721Enumerable, Ownable {
         locked = false;
     }
 
+    event EventCreated(uint256 indexed eventId, string name, uint256 dateTimestamp, string location, uint256 ticketLimit, uint256 ticketPrice);
+    event TicketsPurchased(uint256 indexed eventId, address buyer, uint256 quantity);
+    event TicketUsed(uint256 indexed ticketId, uint256 indexed eventId);
+    event Withdrawn(address indexed owner, uint256 amount);
+    event EventToggled(uint256 indexed eventId, bool isClosed);
 
     function createEvent(
         string memory name,
@@ -57,6 +62,7 @@ contract EventTicketing is ERC721Enumerable, Ownable {
             ticketPrice,
             false
         );
+        emit EventCreated(nextEventId, name, dateTimestamp, location, ticketLimit, ticketPrice);
         nextEventId++;
     }
 
@@ -80,6 +86,7 @@ contract EventTicketing is ERC721Enumerable, Ownable {
             tickets[ticketId] = Ticket(ticketId,eventId, false);
             eventItem.ticketsIssued++;
         }
+        emit TicketsPurchased(eventId, msg.sender, quantity);
     }
 
     function useTicket(uint256 ticketId, uint256 eventId) public onlyOwner {
@@ -93,16 +100,19 @@ contract EventTicketing is ERC721Enumerable, Ownable {
         );
 
         ticketItem.isUsed = true;
+        emit TicketUsed(ticketId, eventId);
     }
 
     function withdraw() public onlyOwner nonReentrant {
         payable(msg.sender).transfer(address(this).balance);
+        emit Withdrawn(msg.sender, address(this).balance);
     }
 
     function toggleEvent(uint256 eventId, bool _isClosed) public onlyOwner {
         require(eventId < nextEventId, "Event does not exist");
         Event storage eventItem = events[eventId];
         eventItem.isClosed = _isClosed;
+        emit EventToggled(eventId, _isClosed);
     }
     function viewOpenEvents() public view returns (Event[] memory) {
         uint256 count = 0;
