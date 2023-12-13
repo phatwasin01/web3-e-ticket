@@ -20,7 +20,7 @@ export default function Events() {
   const mainContract = TicketX__factory.connect(contractAddress, signer!);
   const { data, error, isLoading } = useSWR("events", async () => {
     try {
-      const events = await mainContract.viewAllEvents();
+      const events = await mainContract.viewOpenEvents();
       console.log("=================");
       console.log(events);
       const mockEvents: EventData[] = events.map((event) => ({
