@@ -16,6 +16,7 @@ export interface EventData {
   ticketLimit: number;
   ticketsIssued: number;
   ticketPrice: number;
+  isClosed: boolean;
 }
 
 interface EventsContextType {

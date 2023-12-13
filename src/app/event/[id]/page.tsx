@@ -20,6 +20,8 @@ import { TicketX__factory } from "@/lib/typechain";
 import Link from "next/link";
 import useSWR from "swr";
 import axios from "axios";
+import moment from "moment";
+moment.locale("th");
 export default function Event({ params }: { params: { id: string } }) {
   const [quantity, setQuantity] = useState(1);
   const [txID, setTxID] = useState("");
@@ -106,7 +108,7 @@ export default function Event({ params }: { params: { id: string } }) {
               <div className="flex items-center text-xl font-normal gap-3 mt-4">
                 <FaCalendarAlt />
                 <p className="text-white text-xl font-normal text-opacity-80">
-                  23 November
+                  {moment(event.dateTimestamp * 1000).format("LL")}
                 </p>
               </div>
               <div className="border border-slate-100 border-opacity-80 mt-4 p-5 text-xl">

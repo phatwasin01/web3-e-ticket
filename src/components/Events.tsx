@@ -32,6 +32,7 @@ export default function Events() {
         ticketLimit: event.ticketLimit.toNumber(),
         ticketsIssued: event.ticketsIssued.toNumber(),
         ticketPrice: event.ticketPrice.toNumber(),
+        isClosed: event.isClosed,
       }));
       setEvents(mockEvents);
       return mockEvents;
