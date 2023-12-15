@@ -5,15 +5,10 @@ import React, { useState } from "react";
 import { useWeb3ModalSigner } from "@web3modal/ethers5/react";
 import { contractAddress } from "@/lib/contract";
 import { TicketX__factory } from "@/lib/typechain";
-import { useEvents } from "@/context/EventContext";
-import { createEventFormToWeb3 } from "@/utils/event";
-import { FaCheckCircle } from "react-icons/fa";
-import { MdError } from "react-icons/md";
-import Link from "next/link";
+import { createEventFormToWeb3, ethPriceInTHB } from "@/utils/event";
 import useSWR from "swr";
-import axios from "axios";
+import Modal from "@/components/Modal";
 export default function AdminEvent() {
-  const { events, setEvents } = useEvents();
   const { signer } = useWeb3ModalSigner();
   const [eventName, setEventName] = useState("");
   const [eventLocation, setEventLocation] = useState("");
@@ -25,16 +20,7 @@ export default function AdminEvent() {
   const [isTxProcessing, setIsTxProcessing] = useState(false);
   const [txSuccess, setTxSuccess] = useState(false);
   const [txError, setTxError] = useState("");
-  const { data, error, isLoading } = useSWR("ethPrice", async () => {
-    try {
-      const response = await axios.get(
-        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=thb"
-      );
-      return response.data.ethereum.thb;
-    } catch (error) {
-      console.error("Error fetching ETH price:", error);
-    }
-  });
+  const { data: ethPrice } = useSWR("ethPrice", ethPriceInTHB);
   const mainContract = TicketX__factory.connect(contractAddress, signer!);
   async function handleCreateEvent() {
     if (
@@ -60,6 +46,8 @@ export default function AdminEvent() {
     console.log(event.ticketPrice.toNumber());
     try {
       setIsTxProcessing(true);
+      setTxError("");
+      setTxSuccess(false);
       const modal = document.getElementById("my_modal_1");
       if (modal instanceof HTMLDialogElement) {
         modal.showModal();
@@ -139,7 +127,7 @@ export default function AdminEvent() {
           <label className="label">
             <span className="label-text">
               Price (ETH) ~{" "}
-              {(Number(eventTicketPrice) * Number(data)).toFixed(2)} THB
+              {(Number(eventTicketPrice) * Number(ethPrice)).toFixed(2)} THB
             </span>
           </label>
           <input
@@ -170,42 +158,12 @@ export default function AdminEvent() {
         </button>
       </div>
       <Footer />
-      <dialog id="my_modal_1" className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Transaction Status</h3>
-          <div className="mt-4 mb-4 text-2xl">
-            {isTxProcessing && (
-              <span className="loading loading-dots loading-lg"></span>
-            )}
-            {txSuccess && (
-              <div className="w-full flex justify-center items-center">
-                Transaction Success
-                <FaCheckCircle className="text-success text-2xl" />
-              </div>
-            )}
-            {txError && (
-              <div className="w-full flex justify-center items-center">
-                Transaction Error
-                <MdError className="text-error text-2xl" />
-              </div>
-            )}
-          </div>
-
-          <Link
-            href={`https://goerli.etherscan.io/tx/${txID}`}
-            target="_blank"
-            className="truncate mt-4"
-          >
-            Etherscan: {txID}
-          </Link>
-          <div className="modal-action">
-            <form method="dialog">
-              {/* if there is a button in form, it will close the modal */}
-              <button className="btn">Close</button>
-            </form>
-          </div>
-        </div>
-      </dialog>
+      <Modal
+        isTxProcessing={isTxProcessing}
+        txSuccess={txSuccess}
+        txError={txError}
+        txID={txID}
+      />
     </div>
   );
 }

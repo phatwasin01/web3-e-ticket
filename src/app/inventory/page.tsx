@@ -7,9 +7,8 @@ import { useWeb3ModalSigner } from "@web3modal/ethers5/react";
 import { contractAddress } from "@/lib/contract";
 import { TicketX__factory } from "@/lib/typechain";
 import { useEvents } from "@/context/EventContext";
-import type { EventData } from "@/context/EventContext";
 import useSWR from "swr";
-import { BigNumber } from "ethers";
+import { covertEventToEventData } from "@/utils/event";
 export default function Inventory() {
   const [selectedTab, setSelectedTab] = useState(false);
   const { events, setEvents } = useEvents();
@@ -27,17 +26,7 @@ export default function Inventory() {
       });
       if (!events || !eventsCheck) {
         const events = await mainContract.viewAllEvents();
-        const mockEvents: EventData[] = events.map((event) => ({
-          id: event.id.toNumber(),
-          name: event.name,
-          dateTimestamp: event.dateTimestamp.toNumber(),
-          location: event.location,
-          imageCoverUri: event.imageCoverUri,
-          ticketLimit: event.ticketLimit.toNumber(),
-          ticketsIssued: event.ticketsIssued.toNumber(),
-          ticketPrice: event.ticketPrice.toNumber(),
-          isClosed: event.isClosed,
-        }));
+        const mockEvents = covertEventToEventData(events);
         setEvents(mockEvents);
       }
       return tickets;
@@ -45,10 +34,6 @@ export default function Inventory() {
       console.error("Error fetching event:", error);
     }
   });
-  function handleValidate(id: BigNumber) {
-    console.log(id);
-  }
-  console.log(data);
 
   return (
     <div className="min-h-screen ">
@@ -99,15 +84,6 @@ export default function Inventory() {
         )}
       </div>
       <Footer />
-      <dialog id="my_modal_2" className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Hello!</h3>
-          <p className="py-4">Press ESC key or click outside to close</p>
-        </div>
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>
-      </dialog>
     </div>
   );
 }

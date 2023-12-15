@@ -1,17 +1,8 @@
 "use client";
 import Link from "next/link";
 import React from "react";
-import {
-  useWeb3Modal,
-  useWeb3ModalAccount,
-  useWeb3ModalSigner,
-} from "@web3modal/ethers5/react";
 
 export default function Navigation() {
-  const { open } = useWeb3Modal();
-  const { address, chainId, isConnected } = useWeb3ModalAccount();
-  const { signer } = useWeb3ModalSigner();
-
   return (
     <div className="navbar px-3 overflow-hidden">
       <div className="hidden md:flex md:flex-1">

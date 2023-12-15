@@ -4,7 +4,7 @@ import Navigation from "@/components/Navigation";
 import Image from "next/image";
 import React from "react";
 import { FaLocationDot } from "react-icons/fa6";
-import { FaCalendarAlt, FaCheckCircle } from "react-icons/fa";
+import { FaCalendarAlt } from "react-icons/fa";
 import { useState } from "react";
 import {
   useWeb3ModalAccount,
@@ -15,12 +15,11 @@ import { contractAddress } from "@/lib/contract";
 import Loading from "@/components/Loading";
 import { useEvents } from "@/context/EventContext";
 import { FaEthereum } from "react-icons/fa";
-import { MdError } from "react-icons/md";
 import { TicketX__factory } from "@/lib/typechain";
-import Link from "next/link";
 import useSWR from "swr";
-import axios from "axios";
+import { ethPriceInTHB } from "@/utils/event";
 import moment from "moment";
+import Modal from "@/components/Modal";
 moment.locale("th");
 export default function Event({ params }: { params: { id: string } }) {
   const [quantity, setQuantity] = useState(1);
@@ -29,20 +28,11 @@ export default function Event({ params }: { params: { id: string } }) {
   const [txSuccess, setTxSuccess] = useState(false);
   const [txError, setTxError] = useState("");
   const { isConnected } = useWeb3ModalAccount();
-  const { events, setEvents } = useEvents();
+  const { events } = useEvents();
   const event = events.find((event) => event.id === Number(params.id));
   const { signer } = useWeb3ModalSigner();
   const mainContract = TicketX__factory.connect(contractAddress, signer!);
-  const { data, error, isLoading } = useSWR("ethPrice", async () => {
-    try {
-      const response = await axios.get(
-        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=thb"
-      );
-      return response.data.ethereum.thb;
-    } catch (error) {
-      console.error("Error fetching ETH price:", error);
-    }
-  });
+  const { data } = useSWR("ethPrice", ethPriceInTHB);
   async function PurchaseTickets() {
     if (!event) {
       alert("Event not found");
@@ -50,6 +40,8 @@ export default function Event({ params }: { params: { id: string } }) {
     }
     try {
       setIsTxProcessing(true);
+      setTxError("");
+      setTxSuccess(false);
       const modal = document.getElementById("my_modal_1");
       if (modal instanceof HTMLDialogElement) {
         modal.showModal();
@@ -67,8 +59,6 @@ export default function Event({ params }: { params: { id: string } }) {
       setTxError(error.message);
     }
   }
-  console.log(data);
-
   if (!events || !event) {
     return <Loading />;
   }
@@ -177,42 +167,12 @@ export default function Event({ params }: { params: { id: string } }) {
         </div>
       </div>
       <Footer />
-      <dialog id="my_modal_1" className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Transaction Status</h3>
-          <div className="mt-4 mb-4 text-2xl">
-            {isTxProcessing && (
-              <span className="loading loading-dots loading-lg"></span>
-            )}
-            {txSuccess && (
-              <div className="w-full flex justify-center items-center">
-                Transaction Success
-                <FaCheckCircle className="text-success text-2xl" />
-              </div>
-            )}
-            {txError && (
-              <div className="w-full flex justify-center items-center">
-                Transaction Error
-                <MdError className="text-error text-2xl" />
-              </div>
-            )}
-          </div>
-
-          <Link
-            href={`https://goerli.etherscan.io/tx/${txID}`}
-            target="_blank"
-            className="truncate mt-4"
-          >
-            Etherscan: {txID}
-          </Link>
-          <div className="modal-action">
-            <form method="dialog">
-              {/* if there is a button in form, it will close the modal */}
-              <button className="btn">Close</button>
-            </form>
-          </div>
-        </div>
-      </dialog>
+      <Modal
+        isTxProcessing={isTxProcessing}
+        txSuccess={txSuccess}
+        txError={txError}
+        txID={txID}
+      />
     </div>
   );
 }

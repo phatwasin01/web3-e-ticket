@@ -6,11 +6,8 @@ import { useWeb3ModalSigner } from "@web3modal/ethers5/react";
 import { contractAddress } from "@/lib/contract";
 import { TicketX__factory } from "@/lib/typechain";
 import { useEvents } from "@/context/EventContext";
-import { createEventFormToWeb3 } from "@/utils/event";
-import { FaCheckCircle } from "react-icons/fa";
-import { MdError } from "react-icons/md";
-import Link from "next/link";
 import { ethers } from "ethers";
+import Modal from "@/components/Modal";
 export default function Validate() {
   const { events, setEvents } = useEvents();
   const { signer } = useWeb3ModalSigner();
@@ -29,6 +26,8 @@ export default function Validate() {
     }
     try {
       setIsTxProcessing(true);
+      setTxError("");
+      setTxSuccess(false);
       const modal = document.getElementById("my_modal_1");
       if (modal instanceof HTMLDialogElement) {
         modal.showModal();
@@ -86,43 +85,12 @@ export default function Validate() {
         </button>
       </div>
       <Footer />
-      <dialog id="my_modal_1" className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Transaction Status</h3>
-          <div className="mt-4 mb-4 text-2xl">
-            {isTxProcessing && (
-              <span className="loading loading-dots loading-lg"></span>
-            )}
-            {txSuccess && (
-              <div className="w-full flex justify-center items-center">
-                Transaction Success
-                <FaCheckCircle className="text-success text-2xl" />
-              </div>
-            )}
-            {txError && (
-              <div className="w-full flex justify-center items-center">
-                Transaction Error
-                <MdError className="text-error text-2xl" />
-                <p className="text-xs">{txError}</p>
-              </div>
-            )}
-          </div>
-
-          <Link
-            href={`https://goerli.etherscan.io/tx/${txID}`}
-            target="_blank"
-            className="truncate mt-4"
-          >
-            Etherscan: {txID}
-          </Link>
-          <div className="modal-action">
-            <form method="dialog">
-              {/* if there is a button in form, it will close the modal */}
-              <button className="btn">Close</button>
-            </form>
-          </div>
-        </div>
-      </dialog>
+      <Modal
+        isTxProcessing={isTxProcessing}
+        txSuccess={txSuccess}
+        txError={txError}
+        txID={txID}
+      />
     </div>
   );
 }

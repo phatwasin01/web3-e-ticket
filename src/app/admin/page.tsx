@@ -5,17 +5,16 @@ import React, { useState } from "react";
 import { useWeb3ModalSigner } from "@web3modal/ethers5/react";
 import { contractAddress } from "@/lib/contract";
 import { TicketX__factory } from "@/lib/typechain";
-import { FaCalendarAlt, FaCheckCircle, FaEthereum } from "react-icons/fa";
-import { MdError } from "react-icons/md";
+import { FaCalendarAlt, FaEthereum } from "react-icons/fa";
 import Link from "next/link";
 import useSWR from "swr";
 import axios from "axios";
-import type { EventData } from "@/context/EventContext";
 import { ethers } from "ethers";
 import Image from "next/image";
-import Loading from "@/components/Loading";
 import moment from "moment";
 import { FaLocationDot } from "react-icons/fa6";
+import { covertEventToEventData } from "@/utils/event";
+import Modal from "@/components/Modal";
 
 export default function Admin() {
   const { signer } = useWeb3ModalSigner();
@@ -44,17 +43,7 @@ export default function Admin() {
   const { data: allEvents } = useSWR("allEvents", async () => {
     try {
       const events = await mainContract.viewAllEvents();
-      const mockEvents: EventData[] = events.map((event) => ({
-        id: event.id.toNumber(),
-        name: event.name,
-        dateTimestamp: event.dateTimestamp.toNumber(),
-        location: event.location,
-        imageCoverUri: event.imageCoverUri,
-        ticketLimit: event.ticketLimit.toNumber(),
-        ticketsIssued: event.ticketsIssued.toNumber(),
-        ticketPrice: event.ticketPrice.toNumber(),
-        isClosed: event.isClosed,
-      }));
+      const mockEvents = covertEventToEventData(events);
       return mockEvents;
     } catch (error) {
       console.error("Error fetching event:", error);
@@ -64,6 +53,8 @@ export default function Admin() {
   async function handleWithdraw() {
     try {
       setIsTxProcessing(true);
+      setTxError("");
+      setTxSuccess(false);
       const modal = document.getElementById("my_modal_1");
       if (modal instanceof HTMLDialogElement) {
         modal.showModal();
@@ -82,6 +73,8 @@ export default function Admin() {
   async function handleToggleEvent(id: number, isClosed: boolean) {
     try {
       setIsTxProcessing(true);
+      setTxError("");
+      setTxSuccess(false);
       const modal = document.getElementById("my_modal_1");
       if (modal instanceof HTMLDialogElement) {
         modal.showModal();
@@ -206,42 +199,12 @@ export default function Admin() {
         </div>
       </div>
       <Footer />
-      <dialog id="my_modal_1" className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Transaction Status</h3>
-          <div className="mt-4 mb-4 text-2xl">
-            {isTxProcessing && (
-              <span className="loading loading-dots loading-lg"></span>
-            )}
-            {txSuccess && (
-              <div className="w-full flex justify-center items-center">
-                Transaction Success
-                <FaCheckCircle className="text-success text-2xl" />
-              </div>
-            )}
-            {txError && (
-              <div className="w-full flex justify-center items-center">
-                Transaction Error
-                <MdError className="text-error text-2xl" />
-              </div>
-            )}
-          </div>
-
-          <Link
-            href={`https://goerli.etherscan.io/tx/${txID}`}
-            target="_blank"
-            className="truncate mt-4"
-          >
-            Etherscan: {txID}
-          </Link>
-          <div className="modal-action">
-            <form method="dialog">
-              {/* if there is a button in form, it will close the modal */}
-              <button className="btn">Close</button>
-            </form>
-          </div>
-        </div>
-      </dialog>
+      <Modal
+        isTxProcessing={isTxProcessing}
+        txSuccess={txSuccess}
+        txError={txError}
+        txID={txID}
+      />
     </div>
   );
 }

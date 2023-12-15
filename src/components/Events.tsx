@@ -10,8 +10,7 @@ import useSWR from "swr";
 import { contractAddress } from "@/lib/contract";
 import { TicketX__factory } from "@/lib/typechain";
 import { useEvents } from "@/context/EventContext";
-import type { EventData } from "@/context/EventContext";
-
+import { covertEventToEventData } from "@/utils/event";
 export default function Events() {
   const { isConnected } = useWeb3ModalAccount();
   const { signer } = useWeb3ModalSigner();
@@ -21,19 +20,7 @@ export default function Events() {
   const { data, error, isLoading } = useSWR("events", async () => {
     try {
       const events = await mainContract.viewOpenEvents();
-      console.log("=================");
-      console.log(events);
-      const mockEvents: EventData[] = events.map((event) => ({
-        id: event.id.toNumber(),
-        name: event.name,
-        dateTimestamp: event.dateTimestamp.toNumber(),
-        location: event.location,
-        imageCoverUri: event.imageCoverUri,
-        ticketLimit: event.ticketLimit.toNumber(),
-        ticketsIssued: event.ticketsIssued.toNumber(),
-        ticketPrice: event.ticketPrice.toNumber(),
-        isClosed: event.isClosed,
-      }));
+      const mockEvents = covertEventToEventData(events);
       setEvents(mockEvents);
       return mockEvents;
     } catch (error) {
