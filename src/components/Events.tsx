@@ -30,6 +30,15 @@ export default function Events() {
   const handleClick = (id: number) => {
     router.push(`/event/${id}`);
   };
+  if (!signer) {
+    return (
+      <div>
+        <div className="mt-10 w-full flex justify-center">
+          <div className="text-error text-xl">Please connect your wallet</div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div>
       {events && (
@@ -51,6 +60,7 @@ export default function Events() {
           <span className="loading loading-dots loading-lg text-primary"></span>
         </div>
       )}
+      <div></div>
     </div>
   );
 }
